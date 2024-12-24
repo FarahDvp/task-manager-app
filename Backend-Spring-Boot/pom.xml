@@ -9,13 +9,13 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.isamm.tasks</groupId>
-    <artifactId>TaskManagement</artifactId>
+    <artifactId>Backend-Spring-Boot</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>TaskManagement</name>
+    <name>Backend-Spring-Boot</name>
     <description>SpringBoot Project for task management</description>
     <properties>
         <java.version>17</java.version>
-        <sonar.projectKey>mhabaieb24_devops_AYzGrDO0yPycaJ6FRQJM</sonar.projectKey>
+        <sonar.projectKey>farah_devops_AYzGrDO0yPycaJ6FRQJM</sonar.projectKey>
         <sonar.projectName>devops</sonar.projectName>
         <sonar.qualitygate.wait>true</sonar.qualitygate.wait>
     </properties>
