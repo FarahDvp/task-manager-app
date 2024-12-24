@@ -1,0 +1,389 @@
+<div class="header-title mb-2">
+  <div class="d-flex flex-wrap justify-content-between mb-5 mt-5">
+  <h4>Projet : {{project.name}} </h4>
+</div>
+</div>
+<!-- description -->
+<div class="row">
+        <div class="card">
+          <div class="card-body">
+                  <h5 class="col-lg-12 mb-1">Description </h5>
+                  <p class="col-lg-12 mb-0">{{project.description}}</p>
+          </div>
+        </div>
+</div>
+<!-- task -->
+<div class="row mt-1 ">
+  <div class="card col-lg-12">
+    <div class="card-body">
+      <!-- new task -->
+      <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+        <h5>New Task</h5>
+        <div class="d-flex flex-wrap align-items-center">
+          <a href="#" class="btn btn-primary" data-target="#new-task-modal" data-toggle="modal">New Task</a>
+        </div>
+    </div>
+ <br>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-lg-12" *ngFor="let t of listTask">
+            <div class="card card-widget task-card">
+              <div class="card-header">
+                <h5 >{{ t.title }}</h5>
+              </div>
+              <div class="card-body">
+                <div class="d-flex flex-wrap align-items-center justify-content-between">
+                  <!-- div labels ++ -->
+                  <ul class="list-inline mb-1 pr-3 ">
+                    <li class="list-inline-item mr-2  pr-2 border-right" *ngFor="let l of t.labels">
+                      <span>{{l.name}}</span>
+                    </li>
+                    <li class="list-inline-item mr-2 pr-2 border-right">{{t.priority}}</li>
+                    <li class="list-inline-item mr-2 pr-2 border-right" *ngFor="let m of t.members">
+                      <span>{{m.fullname}}</span>
+                    </li>
+                  </ul>
+                  <!-- div btn -->
+                <div class="media align-items-center mt-md-0 mt-3">
+                    <a class="btn bg-primary-light m-1" data-toggle="collapse" href="#collapseSee1" role="button" aria-expanded="false" aria-controls="collapseSee1" (click)="getTaskById(t.id)"><i class="ri-eye-2-line m-1"></i></a>
+                  <a class="btn bg-warning-light m-1"
+                     [attr.data-toggle]="'collapse'"
+                     [attr.href]="'#collapseEdit' + t.id"
+                     role="button"
+                     [attr.aria-expanded]="currentOpenCollapseEdit === ('collapseEdit' + t.id)"
+                     [attr.aria-controls]="'collapseEdit' + t.id"
+                     (click)="setCurrentOpenCollapseEdit(currentOpenCollapseEdit === ('collapseEdit' + t.id) ? null : ('collapseEdit' + t.id));getTaskById(t.id)">
+                    <i class="ri-edit-box-line m-1"></i>
+                  </a>
+                  <a class="btn bg-danger-light m-1"  role="button" (click)="MoveToTrash(t.id)"><i class="ri-delete-bin-2-fill m-1"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- see -->
+            <div class="collapse" id="collapseSee1">
+              <div class="card card-list task-card">
+                <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
+                  <div class="header-title">
+                      <label class="h5">Details Task</label>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="form-group mb-3 position-relative col-lg-12">
+                    <label class="h5">Task Name</label>
+                    <input type="text" class="form-control bg-white" placeholder="Design landing page of webkit" [value]="t.title" readonly>
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="form-group mb-3 position-relative col-lg-12">
+                    <label class="h5">Task Description</label>
+                    <textarea type="text" class="form-control bg-white" placeholder="Design landing page of webkit" [value]="t.description" readonly>
+                    </textarea>
+                  </div>
+                  </div>
+                  <div class="row">
+                    <div class="form-group mb-3 position-relative col-lg-12">
+                      <label class="h5">Task Labels</label>
+                      <ul class="list-inline mb-0 pr-2 border-right">
+                        <li class="list-inline-item pr-2 border-right" *ngFor="let l of t.labels">
+                          <span>{{l.name}}</span>
+                        </li>
+                    </ul>
+                    </div>
+                  </div>
+                  <div class="row">
+                      <!-- members -->
+                      <div class="col-lg-6">
+                        <div class="form-group mb-0">
+                          <label class="h5">Memebers</label>
+                          <ul class="list-inline mb-0">
+                            <li class="list-inline-item pr-2 border-right" *ngFor="let m of t.members">
+                              <span>{{m.fullname}}</span>
+                            </li>
+                          </ul>
+                        </div>
+                        </div>
+                      <!-- periority -->
+                      <div class="col-lg-6">
+                        <div class="form-group mb-0">
+                          <label class="h5">Periority</label>
+                          <input type="text" class="form-control bg-white" placeholder="Must" readonly>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <!-- edit -->
+            <div class="collapse" [id]="'collapseEdit'+t.id" *ngIf="currentOpenCollapseEdit === ('collapseEdit' + t.id)">
+
+            <div class="card card-list task-card">
+                <div class="card-header d-flex align-items-center justify-content-between px-0 mx-3">
+                  <div class="header-title">
+                    <label class="h5">Edit Task</label>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <form class="mb-2"  [formGroup]="formService.formGroupAddTask" >
+                  <div class="form-group mb-3 position-relative">
+                    <label class="h5">Task Name</label>
+                    <input type="text"
+                           [ngClass]="{ 'is-invalid':formService.nameT && formService.nameT.errors && formService.nameT.touched}"
+                           formControlName="nameT"
+                           [value]="this.task.title"
+                           class="form-control bg-white" placeholder="Design landing page of webkit"/>
+                    <div *ngIf="formService.nameT && formService.nameT.errors && formService.nameT.touched" class="invalid-feedback">
+                      <div *ngIf="formService.nameT.errors.required">Please enter your task Name*</div>
+                      <div *ngIf="formService.nameT.errors.minlength">The title of task must be at least 3 characters long</div>
+                      <div *ngIf="formService.nameT.errors.maxlength">The title of task cannot exceed 30 characters*</div>
+                    </div>
+                    <div *ngIf="formService.nameT && formService.nameT.errors && formService.nameT.touched" class="invalid-feedback">
+                      <div *ngIf="formService.nameT.hasError('pattern')">The task Name must be lettres*</div>
+                  </div>
+                  </div>
+                    <!-- description -->
+                    <div class="form-group mb-3 position-relative">
+                      <label class="h5">Task Description</label>
+                      <textarea type="text" class="form-control bg-white" formControlName="descriptionT"  placeholder="Design landing page of webkit"></textarea>
+                      <div *ngIf="formService.descriptionT && formService.descriptionT.errors && formService.descriptionT.touched" class="invalid-feedback">
+                        <div *ngIf="formService.descriptionT.errors.required">Please enter your task Description*</div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <!-- start date  -->
+                      <div class="col-lg-6">
+                        <div class="form-group mb-3 ">
+                          <label class="h5">Start Date*</label>
+                          <input type="date" class="form-control" [ngClass]="{ 'is-invalid': formService.dateStartT && formService.dateStartT.errors && formService.dateStartT.touched}"
+                                 formControlName="dateStartT" />
+                          <div *ngIf="formService.dateStartT && formService.dateStartT.errors && formService.dateStartT.touched" class="invalid-feedback">
+                            <div *ngIf="formService.dateStartT.errors.required">Please enter your task Start Date*</div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- due date  -->
+                      <div class="col-lg-6">
+                        <div class="form-group mb-3">
+                          <label class="h5">Due Date*</label>
+                          <input type="date" class="form-control" [ngClass]="{ 'is-invalid': formService.dueDateT && formService.dueDateT.errors && formService.dueDateT.touched}"
+                                 formControlName="dueDateT"  />
+                          <div *ngIf="formService.dueDateT && formService.dueDateT.errors && formService.dueDateT.touched" class="invalid-feedback">
+                            <div *ngIf="formService.dueDateT.errors.required">Please enter your task Due Date*</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- status -->
+                    <div class="row">
+                    <div class="col-lg-6">
+                      <div class="form-group mb-3">
+                        <label class="h5">Status</label>
+                        <select class="form-control" id="editStatus"  formControlName="statusT"  [ngClass]="{ 'is-invalid': formService.statusT && formService.statusT.errors && formService.statusT.touched} " >
+                          <option [ngValue]="s.id" *ngFor="let s of listStatus">{{s.name}}</option>
+                        </select>
+                        <div *ngIf="formService.statusT && formService.statusT.errors && formService.statusT.touched" class="invalid-feedback">
+                          <div *ngIf="formService.statusT.errors.required">Please enter your task Status*</div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="form-group mb-0">
+                        <label class="h5">Priority</label>
+                        <select formControlName="periortyT" class="bg-white selectpicker form-control" data-style="py-0">
+                          <option value="High">High</option>
+                          <option value="Normal">Normal</option>
+                          <option value="Low">Low</option>
+                        </select>
+                      </div>
+                    </div>
+                    </div>
+                    <!-- labels -->
+                    <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="h5">Label</label>
+                        <div *ngFor="let label of listLabels">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [id]="'label-' + label.id"
+                              [value]="label"
+                              [checked]="isLabelSelected(label)"
+                              (change)="toggleLabelSelection(label)"
+                            />
+                            <label class="form-check-label" [for]="'member-' + label.id">
+                              {{ label.name }}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                  <!--    <div class="form-group mb-3">
+                        <label class="h5">Label</label>
+                        <select class="form-control"  (change)="updateSelectedLabel(listLabels)" class="form-control" name="nameLabel">
+                          <option></option>
+                          <option [value]="label" *ngFor="let label of listLabels">
+                            {{label.name}}
+                          </option>
+                        </select>
+                      </div>-->
+                    </div>
+                      <!-- members -->
+                      <div class="col-lg-6">
+                      <div class="form-group">
+                        <label class="h5">Assigned Members</label>
+                        <div *ngFor="let member of listMembers">
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              type="checkbox"
+                              [id]="'member-' + member.id"
+                              [value]="member"
+                              [checked]="isMemberSelected(member)"
+                              (change)="toggleMemberSelection(member)"
+                            />
+                            <label class="form-check-label" [for]="'member-' + member.id">
+                              {{ member.fullname }}
+                            </label>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <div>
+                    <!-- btn save and cancel -->
+                    <div class="d-flex flex-wrap justify-content-end mt-2">
+                      <div>
+                        <a  class="btn bg-success-light mr-1" (click)="updateTask();">Edit</a>
+                        <a  class="btn bg-danger-light" (click)="onClear()">Cancel</a>
+                      </div>
+                    </div>
+                  </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- New Task Modal -->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="new-task-modal">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-block text-center pb-3 border-bottom">
+        <h3 class="modal-title" id="exampleModalCenterTitle">New Task</h3>
+      </div>
+      <div class="modal-body">
+        <form class="mb-2" [formGroup]="formService.formGroupAddTask" (ngSubmit)="onSubmitTask()">
+          <div class="row">
+            <!-- Task Name -->
+            <div class="col-lg-12">
+              <div class="form-group mb-3">
+                <label class="h5">Task Name</label>
+                <input type="text" class="form-control" formControlName="nameT" placeholder="Enter task Name">
+                <div *ngIf="formService.nameT && formService.nameT.errors && formService.nameT.touched" class="invalid-feedback">
+                  <div *ngIf="formService.nameT.errors.required">Please enter your task Name*</div>
+                  <div *ngIf="formService.nameT.errors.minlength">The title of task must be at least 3 characters long</div>
+                  <div *ngIf="formService.nameT.errors.maxlength">The title of task cannot exceed 30 characters*</div>
+                </div>
+                <div *ngIf="formService.nameT && formService.nameT.errors && formService.nameT.touched" class="invalid-feedback">
+                  <div *ngIf="formService.nameT.hasError('pattern')">The task Name must be letters*</div>
+                </div>
+              </div>
+            </div>
+            <!-- Description -->
+            <div class="col-lg-12">
+              <div class="form-group mb-3">
+                <label class="h5">Description</label>
+                <textarea class="form-control" formControlName="descriptionT" rows="3"></textarea>
+                <div *ngIf="formService.descriptionT && formService.descriptionT.errors && formService.descriptionT.touched" class="invalid-feedback">
+                  <div *ngIf="formService.descriptionT.errors.required">Please enter your task Description*</div>
+                </div>
+              </div>
+            </div>
+              <!-- Start Date -->
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Start Date*</label>
+                  <input type="date" class="form-control" formControlName="dateStartT" value="">
+                  <div *ngIf="formService.dateStartT && formService.dateStartT.errors && formService.dateStartT.touched" class="invalid-feedback">
+                    <div *ngIf="formService.dateStartT.errors.required">Please enter your task Start Date*</div>
+                  </div>
+                </div>
+              </div>
+              <!-- Due Date -->
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Due Date*</label>
+                  <input type="date" class="form-control" formControlName="dueDateT" value="">
+                  <div *ngIf="formService.dueDateT && formService.dueDateT.errors && formService.dueDateT.touched" class="invalid-feedback">
+                    <div *ngIf="formService.dueDateT.errors.required">Please enter your task Due Date*</div>
+                  </div>
+                </div>
+
+              </div>
+              <!-- Level -->
+            <div class="col-lg-6">
+              <div class="form-group mb-0">
+                <label class="h5">Priority</label>
+                <select formControlName="periortyT" class="bg-white selectpicker form-control" data-style="py-0">
+                  <option value="High">High</option>
+                  <option value="Normal">Normal</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+            </div>
+            <!-- status -->
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Status</label>
+                  <select class="form-control"  formControlName="statusT"  [ngClass]="{ 'is-invalid': formService.statusT && formService.statusT.errors && formService.statusT.touched} " >
+                    <option [ngValue]="s.id" *ngFor="let s of listStatus">{{s.name}}</option>
+                  </select>
+                  <div *ngIf="formService.statusT && formService.statusT.errors && formService.statusT.touched" class="invalid-feedback">
+                    <div *ngIf="formService.statusT.errors.required">Please enter your task Status*</div>
+                  </div>
+                </div>
+              </div>
+            <!-- labels -->
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label class="h5">Label</label>
+                <select class="form-control"  formControlName="nameLabel"  [ngClass]="{ 'is-invalid': formService.nameLabel && formService.nameLabel.errors && formService.nameLabel.touched} " >
+                  <option [ngValue]="listeLabels.id" *ngFor="let listeLabels of listLabels">{{listeLabels.name}}</option>
+                </select>
+                <div *ngIf="formService.nameLabel && formService.nameLabel.errors && formService.nameLabel.touched" class="invalid-feedback">
+                  <div *ngIf="formService.nameLabel.errors.required">Please enter your task Labele*</div>
+                </div>
+              </div>
+            </div>
+            <!-- Members -->
+            <div class="col-lg-6">
+              <div class="form-group mb-3">
+                <label class="h5">Members</label>
+                <select class="form-control"  formControlName="nameEmp"  [ngClass]="{ 'is-invalid': formService.nameEmp && formService.nameEmp.errors && formService.nameEmp.touched} " >
+                  <option [ngValue]="m.id" *ngFor="let m of listMembers">{{m.fullname}}</option>
+                </select>
+                <div *ngIf="formService.nameEmp && formService.nameEmp.errors && formService.nameEmp.touched" class="invalid-feedback">
+                  <div *ngIf="formService.nameEmp.errors.required">Please select a member*</div>
+                </div>
+              </div>
+            </div>
+            <!-- Buttons (Save and Cancel) -->
+            <div class="col-lg-12">
+              <div class="d-flex flex-wrap align-items-center justify-content-center mt-4">
+                <button type="submit" class="btn btn-primary mr-3">Save</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" (click)="onClear()">Cancel</button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+

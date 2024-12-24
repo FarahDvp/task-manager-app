@@ -1,0 +1,57 @@
+<div class="header-title">
+  <h4>Trash </h4>
+</div>
+<br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id='table'
+                   datatable
+                   [dtOptions]="dtOptions"
+                   class="display"
+                   style="width:100%">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody *ngIf="loadingData"> <!-- Add this row for the loading indicator -->
+              <tr>
+                <td colspan="8" class="loading-indicator-cell" style="text-align: center;">Loading data...</td>
+              </tr>
+              </tbody>
+              <tbody *ngIf="!loadingData">
+              <tr *ngFor="let task of tasks">
+                <td>{{task.id}}</td>
+                <td>{{task.title}}</td>
+                <td>{{task.description}}</td>
+                <td>{{task.startDate}}</td>
+                <td>{{task.dueDate}}</td>
+                <td>{{task.status}}</td>
+                <td>
+                  <div style="display: flex"><a class="btn bg-secondary-light m-1 restore-button" (click)="cancelHidden(task.id)" role="button">
+                    <i class="ri-eye-close-line m-1" ></i>Restore
+                  </a>
+                    <a class="btn bg-danger m-1 delete-button" (click)="deleteTask(task.id)" role="button">
+                      <i class="ri-delete-bin-line m-1" ></i>Delete
+                    </a></div>
+                </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+.row{
+  width: 100%;
+}
+.card{
+  width: 100%;
+}
+.periortyHigh{
+  background-color:#BF3131 ;
+  color: white;
+}
+.periortyLow{
+  background-color:#FFD93D;
+  color: white;
+
+}
+.periortyNormal{
+  background-color: #7AA874;
+  color: white;
+}
+.levelMust{
+  background-color: #B31312;
+  color: white;
+
+}
+.levelCould{
+  background-color: #A3B763;
+  color: white;
+
+}
+.levelSould{
+   background-color: #F2BE22;
+  color: white;
+
+}
+.levelWill{
+    background-color: #E57C23;
+  color: white;
+  }
+.taskLabels{
+  color: white;
+  width: auto;
+  height: auto;
+  margin: 2px ;
+  padding: 5px;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #ddd;
+}

@@ -1,0 +1,111 @@
+<div class="wrapper">
+  <section class="login-content">
+    <div class="container">
+      <div class="row align-items-center justify-content-center height-self-center">
+        <div class="col-lg-8">
+          <div class="card auth-card">
+            <div class="card-body p-0">
+              <div class="d-flex align-items-center auth-content">
+                <div class="col-lg-6 bg-primary content-left">
+                  <div class="p-3">
+                    <h2 class="mb-2 text-white">Sign Up to Noello</h2>
+                    <form [formGroup]="formService.formGroupAddEmp" >
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="floating-label form-group">
+                            <input class="floating-input form-control"
+                                   formControlName="nameEmp"
+                                   placeholder=" "
+                                   [ngClass]="{ 'is-invalid':formService.nameEmp && formService.nameEmp.errors && formService.nameEmp.touched}"
+                                   type="text"  />
+                            <label>Full Name</label>
+                            <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.errors">
+                              <div *ngIf="formService.nameEmp.errors.required">Please enter the name*</div>
+                              <div *ngIf="formService.nameEmp.errors.minlength">The Name  must be at least 3 characters long*</div>
+                              <div *ngIf="formService.nameEmp.errors.maxlength">The Name cannot exceed 20 characters*</div>
+                            </div>
+                            <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.hasError('pattern')">
+                              The age must be letters*
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="floating-label form-group">
+                            <input class="floating-input form-control" type="email" [ngClass]="{ 'is-invalid':formService.emailEmp && formService.emailEmp.errors && formService.emailEmp.touched}"
+                                   formControlName="emailEmp"
+                                   placeholder=" "
+                            />
+                            <label>Email</label>
+                            <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('required')">
+                              Please enter email*
+                            </div>
+                            <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('email')">
+                              The email must be a valid email address*
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="floating-label form-group">
+                            <input class="floating-input form-control"
+                                   [ngClass]="{ 'is-invalid':formService.phoneEmp && formService.phoneEmp.errors && formService.phoneEmp.touched}"
+                                   formControlName="phoneEmp"
+                                   placeholder=" "
+                                   type="text" />
+                            <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.errors">
+                              <div *ngIf="formService.phoneEmp.errors.required">Please enter the phone number*</div>
+                              <div *ngIf="formService.phoneEmp.errors.minlength">The phone number must be at least 8 numbers*</div>
+                              <div *ngIf="formService.phoneEmp.errors.maxlength">The phone number  cannot exceed 8 numbers*</div>
+                            </div>
+                            <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.hasError('pattern')">
+                              The phone number must be 8 digits*
+                            </div>
+                            <label>Phone No.</label>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="floating-label form-group">
+                            <input class="floating-input form-control" formControlName="usernameEmp"
+                                   placeholder=" "
+                                   [ngClass]="{ 'is-invalid':formService.usernameEmp && formService.usernameEmp.errors && formService.usernameEmp.touched}"/>
+                            <label>Login</label>
+                            <div class="invalid-feedback" *ngIf="formService.usernameEmp && formService.usernameEmp.errors">
+                              <div *ngIf="formService.usernameEmp.errors.required">Please enter the login*</div>
+                              <div *ngIf="formService.usernameEmp.errors.minlength">The login  must be at least 3 characters long*</div>
+                              <div *ngIf="formService.usernameEmp.errors.maxlength">the login cannot exceed 20 characters*</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-6">
+                          <div class="floating-label form-group">
+                            <input class="floating-input form-control"
+                                   placeholder=" "
+                                   type="password" formControlName="passwordEmp"
+                                   [ngClass]="{ 'is-invalid':formService.passwordEmp && formService.passwordEmp.errors && formService.passwordEmp.touched}"
+                            />
+                            <label>Password</label>
+                            <div class="invalid-feedback" *ngIf="formService.passwordEmp && formService.passwordEmp.errors">
+                              <div *ngIf="formService.passwordEmp.errors.required">Please enter the password*</div>
+                              <div *ngIf="formService.passwordEmp.errors.minlength">The password  must be at least 3 characters long*</div>
+                              <div *ngIf="formService.passwordEmp.errors.maxlength">the password cannot exceed 20 characters*</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="btn btn-white col-lg-12" type="submit" (click)="onSubmit()" data-dismiss="modal">Sign Up</button>
+                      <p class="mt-2">
+                        Already have an Account <a href="" (click)="goToLogin()" class="text-white text-underline">Sign In</a>
+                      </p>
+                    </form>
+                  </div>
+                </div>
+                <div class="col-lg-6 content-right">
+                  <img src="assets/images/login/01.png" class="img-fluid image-right" alt="">
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

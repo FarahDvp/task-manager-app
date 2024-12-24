@@ -1,0 +1,374 @@
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-flex flex-wrap align-items-center justify-content-between breadcrumb-content">
+              <h5>Employees</h5>
+                <div class="pl-3 border-left btn-new">
+                  <a href="#" class="btn btn-primary" data-target="#new-user-modal" data-toggle="modal">New Employee</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    <!-- employee list -->
+    <div id="grid" class="item-content animate__animated animate__fadeIn active" data-toggle-extra="tab-content">
+      <div class="row" >
+        <div class="col-lg-4 col-md-6" *ngFor="let m of listMembers">
+          <div class="card-transparent card-block card-stretch card-height">
+            <div class="card-body text-center p-0">
+              <div class="item">
+                <div class="odr-img">
+                  <img src="assets/images/user/01.jpg" class="img-fluid rounded-circle avatar-90 m-auto" alt="image">
+                </div>
+                <div class="odr-content rounded">
+                  <h4 class="mb-2">{{m.fullname}}   </h4>
+                  <p class="mb-1">{{m.role}}</p>
+                  <p class="mb-3">{{m.email}}</p>
+                  <ul class="list-unstyled mb-3">
+                    <li class="btn bg-primary-light rounded-circle iq-card-icon-small mr-4" (click)="getDetailsUser(m.id)"data-target="#show-user-modal" data-toggle="modal"><i class="ri-user-search-fill m-0"></i></li>
+                    <li class="btn bg-warning-light rounded-circle iq-card-icon-small mr-4"(click)="getDetailsUser(m.id)"data-target="#edit-user-modal" data-toggle="modal"><i class="ri-user-settings-line m-0"></i></li>
+                    <li class="btn bg-secondary-light rounded-circle iq-card-icon-small" (click)="getDetailsUser(m.id)"data-target="#deleteUser" data-toggle="modal"><i class="ri-user-unfollow-line m-0"></i></li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page end  -->
+  </div>
+
+<!-- Wrapper End-->
+<!-- Modal list start -->
+<!-- Modal 1 : new emp -->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="new-user-modal">
+  <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-block text-center pb-3 border-bttom">
+        <h3 class="modal-title" id="exampleModalCenterTitle01">New Employee</h3>
+      </div>
+      <div class="modal-body">
+        <form  [formGroup]="formService.formGroupAddEmp" >
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <label  class="h5">Full Name</label>
+              <input
+                formControlName="nameEmp"
+                [ngClass]="{ 'is-invalid':formService.nameEmp && formService.nameEmp.errors && formService.nameEmp.touched}"
+                type="text" class="form-control"  placeholder="Enter the full name"/>
+              <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.errors">
+                <div *ngIf="formService.nameEmp.errors.required">Please enter the name*</div>
+                <div *ngIf="formService.nameEmp.errors.minlength">The Name  must be at least 3 characters long*</div>
+                <div *ngIf="formService.nameEmp.errors.maxlength">The Name cannot exceed 20 characters*</div>
+              </div>
+              <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.hasError('pattern')">
+                The age must be letters*
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label  class="h5">Phone Number</label>
+              <input
+                [ngClass]="{ 'is-invalid':formService.phoneEmp && formService.phoneEmp.errors && formService.phoneEmp.touched}"
+                formControlName="phoneEmp"
+                type="text" class="form-control"  placeholder="Enter phone number"
+              />
+              <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.errors">
+                <div *ngIf="formService.phoneEmp.errors.required">Please enter the phone number*</div>
+                <div *ngIf="formService.phoneEmp.errors.minlength">The phone number must be at least 8 numbers*</div>
+                <div *ngIf="formService.phoneEmp.errors.maxlength">The phone number  cannot exceed 8 numbers*</div>
+
+              </div>
+              <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.hasError('pattern')">
+                The phone number must be 8 digits*
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label class="h5">Email</label>
+              <input
+                [ngClass]="{ 'is-invalid':formService.emailEmp && formService.emailEmp.errors && formService.emailEmp.touched}"
+                formControlName="emailEmp"
+                type="text" class="form-control"  placeholder="Enter your Email"
+              />
+              <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('required')">
+                Please enter email*
+              </div>
+              <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('email')">
+                The email must be a valid email address*
+            </div>
+          </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label class="h5">Login</label>
+              <input
+                formControlName="usernameEmp"
+                [ngClass]="{ 'is-invalid':formService.usernameEmp && formService.usernameEmp.errors && formService.usernameEmp.touched}"
+                type="text" class="form-control"  placeholder="Enter your Login"/>
+              <div class="invalid-feedback" *ngIf="formService.usernameEmp && formService.usernameEmp.errors">
+                <div *ngIf="formService.usernameEmp.errors.required">Please enter the login*</div>
+                <div *ngIf="formService.usernameEmp.errors.minlength">The login  must be at least 3 characters long*</div>
+                <div *ngIf="formService.usernameEmp.errors.maxlength">the login cannot exceed 20 characters*</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label class="h5">Password</label>
+              <input
+                formControlName="passwordEmp"
+                [ngClass]="{ 'is-invalid':formService.passwordEmp && formService.passwordEmp.errors && formService.passwordEmp.touched}"
+                type="password" class="form-control"  placeholder="Enter your Password"/>
+              <div class="invalid-feedback" *ngIf="formService.passwordEmp && formService.passwordEmp.errors">
+                <div *ngIf="formService.passwordEmp.errors.required">Please enter the password*</div>
+                <div *ngIf="formService.passwordEmp.errors.minlength">The password  must be at least 3 characters long*</div>
+                <div *ngIf="formService.passwordEmp.errors.maxlength">the password cannot exceed 20 characters*</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <label class="h5">Role</label>
+              <select name="type" (change)="affecterRole($event)" class="selectpicker form-control" data-style="py-0">
+                <option>Role</option>
+                <option>Designer</option>
+                <option>Developer</option>
+                <option>Manager</option>
+                <option>BDE</option>
+                <option>SEO</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-lg-12">
+            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+              <button class="btn btn-primary mr-3"  type="submit" (click)="onSubmit()" data-dismiss="modal">Save</button>
+              <button class="btn btn-danger" (click)="onClear()" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+  <!-- Modal 2 : edit Member -->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="edit-user-modal">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header d-block text-center pb-3 border-bttom">
+          <h3 class="modal-title" >Edit Employee</h3>
+        </div>
+        <div class="modal-body">
+          <form  [formGroup]="formService.formGroupAddEmp" >
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group mb-3">
+                  <label  class="h5">Full Name</label>
+                  <input
+                    formControlName="nameEmp"
+                    [value]="this.member.fullname"
+                    [ngClass]="{ 'is-invalid':formService.nameEmp && formService.nameEmp.errors && formService.nameEmp.touched}"
+                    type="text" class="form-control"  placeholder="Enter the full name"/>
+                  <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.errors">
+                    <div *ngIf="formService.nameEmp.errors.required">Please enter the name*</div>
+                    <div *ngIf="formService.nameEmp.errors.minlength">The Name  must be at least 3 characters long*</div>
+                    <div *ngIf="formService.nameEmp.errors.maxlength">The Name cannot exceed 20 characters*</div>
+                  </div>
+                  <div class="invalid-feedback" *ngIf="formService.nameEmp && formService.nameEmp.hasError('pattern')">
+                    The age must be letters*
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label  class="h5">Phone Number</label>
+                  <input
+                    [value]="this.member.phone"
+                    [ngClass]="{ 'is-invalid':formService.phoneEmp && formService.phoneEmp.errors && formService.phoneEmp.touched}"
+                    formControlName="phoneEmp"
+                    type="text" class="form-control"  placeholder="Enter phone number"
+                  />
+                  <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.errors">
+                    <div *ngIf="formService.phoneEmp.errors.required">Please enter the phone number*</div>
+                    <div *ngIf="formService.phoneEmp.errors.minlength">The phone number must be at least 8 numbers*</div>
+                    <div *ngIf="formService.phoneEmp.errors.maxlength">The phone number  cannot exceed 8 numbers*</div>
+
+                  </div>
+                  <div class="invalid-feedback" *ngIf="formService.phoneEmp && formService.phoneEmp.hasError('pattern')">
+                    The phone number must be 8 digits*
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Email</label>
+                  <input
+                    [value]="this.member.email"
+                    [ngClass]="{ 'is-invalid':formService.emailEmp && formService.emailEmp.errors && formService.emailEmp.touched}"
+                    formControlName="emailEmp"
+                    type="text" class="form-control"  placeholder="Enter your Email"
+                  />
+                  <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('required')">
+                    Please enter email*
+                  </div>
+                  <div class="invalid-feedback" *ngIf="formService.emailEmp && formService.emailEmp.hasError('email')">
+                    The email must be a valid email address*
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Login</label>
+                  <input
+                    [value]="this.member.username"
+                    formControlName="usernameEmp"
+                    [ngClass]="{ 'is-invalid':formService.usernameEmp && formService.usernameEmp.errors && formService.usernameEmp.touched}"
+                    type="text" class="form-control"  placeholder="Enter your Login"/>
+                  <div class="invalid-feedback" *ngIf="formService.usernameEmp && formService.usernameEmp.errors">
+                    <div *ngIf="formService.usernameEmp.errors.required">Please enter the login*</div>
+                    <div *ngIf="formService.usernameEmp.errors.minlength">The login  must be at least 3 characters long*</div>
+                    <div *ngIf="formService.usernameEmp.errors.maxlength">the login cannot exceed 20 characters*</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Password</label>
+                  <input
+                    [value]="this.member.password"
+                    formControlName="passwordEmp"
+                    [ngClass]="{ 'is-invalid':formService.passwordEmp && formService.passwordEmp.errors && formService.passwordEmp.touched}"
+                    type="password" class="form-control"  placeholder="Enter your Password"/>
+                  <div class="invalid-feedback" *ngIf="formService.passwordEmp && formService.passwordEmp.errors">
+                    <div *ngIf="formService.passwordEmp.errors.required">Please enter the password*</div>
+                    <div *ngIf="formService.passwordEmp.errors.minlength">The password  must be at least 3 characters long*</div>
+                    <div *ngIf="formService.passwordEmp.errors.maxlength">the password cannot exceed 20 characters*</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="form-group mb-3">
+                  <label class="h5">Role</label>
+                  <select name="type" (change)="affecterRole($event)" class="selectpicker form-control" data-style="py-0">
+                    <option>Role</option>
+                    <option>Designer</option>
+                    <option>Developer</option>
+                    <option>Manager</option>
+                    <option>BDE</option>
+                    <option>SEO</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                  <button class="btn btn-primary mr-3"  type="submit" (click)="editUser();onClear()" data-dismiss="modal">Save</button>
+                  <button class="btn btn-danger" (click)="onClear()" data-dismiss="modal">Cancel</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Modal 3 : edit Member -->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="show-user-modal">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header d-block text-center pb-3 border-bttom">
+          <h3 class="modal-title" >Details Employee</h3>
+        </div>
+        <div class="modal-body">
+          <form  [formGroup]="formService.formGroupAddEmp" >
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group mb-3">
+                  <label  class="h5">Full Name</label>
+                  <input readonly
+                    [value]="this.member.fullname"class="form-control"  type="text" />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label  class="h5">Phone Number</label>
+                  <input readonly
+                    [value]="this.member.phone"class="form-control"   type="text"  />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Email</label>
+                  <input readonly
+                    [value]="this.member.email"class="form-control" type="text"  />
+
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Login</label>
+                  <input readonly
+                    [value]="this.member.username" class="form-control" type="text"  />
+
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="form-group mb-3">
+                  <label class="h5">Password</label>
+                  <input readonly
+                    [value]="this.member.password" class="form-control" type="password" />
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="form-group mb-3">
+                  <label class="h5">Role</label>
+                  <input type="text" readonly [value]="this.member.role" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                  <button class="btn btn-danger" (click)="onClear()" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- Modal 4 : delete emp -->
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="deleteUser">
+    <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header d-block text-center pb-3 border-bttom">
+          <h3 class="modal-title" >Delete Employee</h3>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group mb-3">
+                <label class="h5 justify-content-center" >Are you sure you want to delete this member ?</label>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-2">
+                <div class="btn btn-primary mr-3" (click)="deleteUser(this.member.id);onClear()" data-dismiss="modal">Yes</div>
+                <div class="btn btn-danger" data-dismiss="modal" >No</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- End Modal list start -->
+

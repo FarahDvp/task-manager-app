@@ -1,0 +1,117 @@
+<div class="header-title">
+  <h4>Liste des tâches du Projet : Titre du projet </h4>
+</div>
+<br>
+<div class="lists-container">
+  <!-- to do -->
+  <div class="example-container">
+    <h5 class="toDO">To Do</h5>
+    <div
+      cdkDropList
+      #todoList="cdkDropList"
+      [cdkDropListData]="listTaskToDO"
+      [cdkDropListConnectedTo]="[inProgressList, doneList]"
+      class="example-list"
+      id="todoList"
+      (cdkDropListDropped)="drop(listTaskToDO,$event)">
+      <div class="example-box" *ngFor="let task of listTaskToDO" cdkDrag data-toggle="modal" href="#show-task-modal" (click)="getDetailsTask(task.id)">{{ task.title }}
+      </div>
+    </div>
+  </div>
+  <!-- in progress  -->
+  <div class="example-container">
+    <h5 class="inProgress">In Progress</h5>
+    <div
+      cdkDropList
+      #inProgressList="cdkDropList"
+      [cdkDropListData]="listTaskInProgress"
+      [cdkDropListConnectedTo]="[todoList, doneList]"
+      id="inProgressList"
+      class="example-list"
+      (cdkDropListDropped)="drop(listTaskInProgress,$event)">
+      <div class="example-box" *ngFor="let task of listTaskInProgress" cdkDrag data-toggle="modal" href="#show-task-modal" (click)="getDetailsTask(task.id)">{{task.title }}
+      </div>
+    </div>
+  </div>
+  <!-- done -->
+  <div class="example-container">
+    <h5 class="done">Done</h5>
+    <div
+      cdkDropList
+      #doneList="cdkDropList"
+      [cdkDropListData]="listTaskDone"
+      [cdkDropListConnectedTo]="[todoList, inProgressList]"
+      class="example-list"
+      id="doneList"
+      (cdkDropListDropped)="drop(listTaskDone,$event)">
+      <div class="example-box" *ngFor="let task of listTaskDone" cdkDrag data-toggle="modal" href="#show-task-modal" (click)="getDetailsTask(task.id)">
+        {{ task.title }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" role="dialog" aria-modal="true" id="show-task-modal">
+  <div class="modal-dialog  modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header d-block text-center pb-3 border-bttom">
+        <h3 class="modal-title" id="exampleModalCenterTitle">Details Task</h3>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <!-- titre -->
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <label  class="h5">Task Name</label>
+              <input type="text" class="form-control" readonly [value]="selectedTask.title">
+
+            </div>
+          </div>
+          <!-- description -->
+          <div class="col-lg-12">
+            <div class="form-group mb-3">
+              <label  class="h5">Description</label>
+              <textarea class="form-control" [value]="selectedTask.description" readonly  rows="3"></textarea>
+            </div>
+          </div>
+          <!-- start date  -->
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label  class="h5">Start Dates</label>
+              <input type="date" class="form-control" readonly [value]="selectedTask.startDate">
+            </div>
+
+          </div>
+          <!-- due date  -->
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label  class="h5">Start Dates</label>
+              <input type="date" class="form-control" readonly [value]="selectedTask.dueDate">
+            </div>
+
+          </div>
+          <!-- periorty  -->
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label class="h5">Periorty</label>
+              <input readonly class="form-control" [value]="selectedTask.priority"/>
+            </div>
+          </div>
+<!--          &lt;!&ndash;  level &ndash;&gt;
+          <div class="col-lg-6">
+            <div class="form-group mb-3">
+              <label class="h5">Level </label>
+              <input readonly class="form-control" [value]="selectedTask.level"/>
+            </div>
+          </div>-->
+          <!-- btn save and cancel -->
+          <div class="col-lg-12">
+            <div class="d-flex flex-wrap align-items-ceter justify-content-center mt-4">
+              <button type="reset" (click)="onClear()" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

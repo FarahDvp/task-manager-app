@@ -1,0 +1,181 @@
+<div class="header-title">
+  <h4>All tasks</h4>
+</div>
+<br>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between">
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table id='table'
+                    datatable
+                    [dtOptions]="dtOptions"
+                   class="display"
+                   style="width:100%">
+              <thead>
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Start Date</th>
+                <th>Due Date</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody *ngIf="loadingData"> <!-- Add this row for the loading indicator -->
+              <tr>
+                <td  colspan="8" class="loading-indicator-cell" style="text-align: center;">Loading data...</td>
+              </tr>
+              </tbody>
+              <tbody *ngIf="!loadingData">
+              <tr *ngFor="let task of tasks">
+                <td>{{task.id}}</td>
+                <td>{{task.title}}</td>
+                <td>{{task.description}}</td>
+                <td>{{task.startDate}}</td>
+                <td>{{task.dueDate}}</td>
+                <td>{{task.status}}</td>
+                <td>
+                  <!-- See Task Button -->
+                  <a class="btn bg-primary-light m-1" data-toggle="modal" data-target="#seeTaskModal" (click)="openSeeTaskModal(task)">
+                    <i class="ri-eye-2-line m-1"></i>
+                  </a>
+                  <!-- Edit Task Button -->
+                  <a class="btn bg-warning-light m-1"  (click)="openEditTaskModal(editTaskModal,task)">
+                    <i class="ri-edit-box-line m-1"></i>
+                  </a>
+                  <!-- Delete Task Button -->
+                  <a class="btn bg-danger-light m-1 delete-button" (click)="openDeleteTaskModal(deleteTaskModal,task)">
+                    <i class="ri-delete-bin-2-fill m-1"></i>
+                  </a>
+                </td>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- See Task Modal -->
+<div class="modal fade" id="seeTaskModal" tabindex="-1" role="dialog" aria-labelledby="seeTaskModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="seeTaskModalLabel">See Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add content for viewing task details here -->
+        <p>Title: {{selectedTask.title}}</p>
+        <p>Description: {{selectedTask.description}}</p>
+        <p>Start Date: {{selectedTask.startDate}}</p>
+        <p>Due Date: {{selectedTask.dueDate}}</p>
+        <p>Status: {{selectedTask.status}}</p>
+        <p>Members:</p>
+        <ul>
+          <li *ngFor="let member of selectedTask.members">{{ member.fullname }}</li>
+        </ul>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Edit Task Modal -->
+<ng-template #editTaskModal>
+  <div>
+
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editTaskModalLabel">Edit Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add content for editing task details here -->
+        <!-- You can use a form to allow users to edit task details -->
+        <form>
+          <div class="form-group">
+            <label for="editTitle">Title</label>
+            <input type="text" class="form-control" id="editTitle" [(ngModel)]="selectedTask.title" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="editDescription">Description</label>
+            <textarea class="form-control" id="editDescription" [(ngModel)]="selectedTask.description" [ngModelOptions]="{standalone: true}"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="editStartDate">Start Date</label>
+            <input type="date" class="form-control" id="editStartDate" [(ngModel)]="selectedTask.startDate" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="editDueDate">Due Date</label>
+            <input type="date" class="form-control" id="editDueDate" [(ngModel)]="selectedTask.dueDate" [ngModelOptions]="{standalone: true}">
+          </div>
+          <div class="form-group">
+            <label for="editStatus">Status</label>
+            <select class="form-control" id="editStatus" [(ngModel)]="selectedTask.status" [ngModelOptions]="{standalone: true}" >
+             <option [ngValue]="s.id" *ngFor="let s of listStatus">{{s.name}}</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label >Assigned Members</label>
+            <div *ngFor="let member of listMembers">
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [id]="'member-' + member.id"
+                  [value]="member"
+                  [checked]="isMemberSelected(member)"
+                  (change)="toggleMemberSelection(member)"
+                />
+                <label class="form-check-label" [for]="'member-' + member.id">
+                  {{ member.fullname }}
+                </label>
+              </div>
+            </div>
+          </div>
+      <!--    <div class="form-group">
+            <label for="editMembers">Assigned Members</label>
+            <select multiple class="form-control" id="editMembers" [(ngModel)]="selectedTask.members" [ngModelOptions]="{standalone: true}">
+              <option [ngValue]="m" *ngFor="let m of listMembers">{{m.fullname}}</option>
+            </select>
+          </div>-->
+          <button type="button" class="btn btn-primary" (click)="saveEditedTask()">Save Changes</button>
+        </form>
+      </div>
+    </div>
+
+</div>
+</ng-template>
+<!-- Delete Task Modal -->
+<ng-template #deleteTaskModal>
+
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteTaskModalLabel">Delete Task</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Add content for confirming task deletion here -->
+        <p>Are you sure you want to delete the task "{{selectedTask.title}}"?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-danger" (click)="MoveToTrash(selectedTask.id)">Delete Task</button>
+      </div>
+    </div>
+
+</ng-template>
